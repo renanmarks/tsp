@@ -1,6 +1,12 @@
 #include "tsplibdata.h"
 
-TSPLibData::TSPLibData()
+tsp::TSPLibData::TSPLibData()
+{
+
+}
+
+
+void tsp::TSPLibData::load(std::istream &file)
 {
 
 }

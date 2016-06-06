@@ -8,6 +8,9 @@
 #include <string>
 #include <vector>
 
+namespace tsp
+{
+
 class TSPLibData
 {
 public:
@@ -101,6 +104,10 @@ public:
 
     TSPLibData();
 
+    void load(std::istream& file);
+
 };
+
+}
 
 #endif // TSPLIBDATA_H
