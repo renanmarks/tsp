@@ -67,6 +67,15 @@ uint32_t tsp::distanceGeographical(const tsp::TSPLibData::NodeCoordinates& c0, c
 
 uint32_t tsp::distancePseudoEuclidean(const tsp::TSPLibData::NodeCoordinates& c0, const tsp::TSPLibData::NodeCoordinates& c1)
 {
-    //TODO: Implement Pseudo-Euclidean distance!
-    return 0;
+    double xd = c0.coordinate.at(0) - c1.coordinate.at(0);
+    double yd = c0.coordinate.at(1) - c1.coordinate.at(1);
+    double rij = std::sqrt( (xd*xd + yd*yd) / 10.0 );
+    uint32_t tij = tsp::roundNearestInt(rij);
+
+    if (tij < rij)
+    {
+        return tij + 1;
+    }
+
+    return tij;
 }
