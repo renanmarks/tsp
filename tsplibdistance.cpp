@@ -3,7 +3,7 @@
 
 uint32_t tsp::roundNearestInt(double d)
 {
-    return static_cast<uint32_t>(x+0.5);
+    return static_cast<uint32_t>(d+0.5);
 }
 
 uint32_t tsp::distanceEuclidean2D(const tsp::TSPLibData::NodeCoordinates& c0, const tsp::TSPLibData::NodeCoordinates& c1)
@@ -52,7 +52,7 @@ uint32_t tsp::distanceMaximum3D(const tsp::TSPLibData::NodeCoordinates& c0, cons
 {
     double xd = std::abs(c0.coordinate.at(0) - c1.coordinate.at(0));
     double yd = std::abs(c0.coordinate.at(1) - c1.coordinate.at(1));
-    double yd = std::abs(c0.coordinate.at(2) - c1.coordinate.at(2));
+    double zd = std::abs(c0.coordinate.at(2) - c1.coordinate.at(2));
     uint32_t max_xy = std::max(tsp::roundNearestInt(xd), tsp::roundNearestInt(yd));
     uint32_t max_xyz = std::max(max_xy, tsp::roundNearestInt(zd));
 
