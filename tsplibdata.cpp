@@ -30,14 +30,14 @@ void fillSpecs(tsp::TSPLibData& data, std::smatch& matches)
     {
         data.comment = matches[2];
     }
-    else if (matches[1] == "DIMMENSION")
+    else if (matches[1] == "DIMENSION")
     {
         std::stringstream stream(matches[2]);
         stream >> data.dimension;
 
         if (data.type == Type::DataType::TSP || data.type == Type::DataType::ATSP)
         {
-            data.coordinates.reserve(data.dimension);
+            data.coordinates.resize(data.dimension);
         }
         //TODO: implement the "dimmension" for other types, if necessary
     }
@@ -48,19 +48,19 @@ void fillSpecs(tsp::TSPLibData& data, std::smatch& matches)
     }
     else if (matches[1] == "EDGE_WEIGHT_TYPE")
     {
-        if      (matches[2] == "EXPLICIT") data.edgeWeightType = Type::EdgeWeightType::EXPLICIT;
-        else if (matches[2] == "EUC_2D")   data.edgeWeightType = Type::EdgeWeightType::EUC_2D;
-        else if (matches[2] == "EUC_3D")   data.edgeWeightType = Type::EdgeWeightType::EUC_3D;
-        else if (matches[2] == "MAX_2D")   data.edgeWeightType = Type::EdgeWeightType::MAX_2D;
-        else if (matches[2] == "MAX_3D")   data.edgeWeightType = Type::EdgeWeightType::MAX_3D;
-        else if (matches[2] == "MAN_2D")   data.edgeWeightType = Type::EdgeWeightType::MAN_2D;
-        else if (matches[2] == "MAN_3D")   data.edgeWeightType = Type::EdgeWeightType::MAN_3D;
-        else if (matches[2] == "CEIL_2D")  data.edgeWeightType = Type::EdgeWeightType::CEIL_2D;
-        else if (matches[2] == "GEO")      data.edgeWeightType = Type::EdgeWeightType::GEO;
-        else if (matches[2] == "ATT")      data.edgeWeightType = Type::EdgeWeightType::ATT;
-        else if (matches[2] == "XRAY1")    data.edgeWeightType = Type::EdgeWeightType::XRAY1;
-        else if (matches[2] == "XRAY2")    data.edgeWeightType = Type::EdgeWeightType::XRAY2;
-        else if (matches[2] == "SPECIAL")  data.edgeWeightType = Type::EdgeWeightType::SPECIAL;
+        if      (matches[2] == "EXPLICIT") { data.edgeWeightType = Type::EdgeWeightType::EXPLICIT; }
+        else if (matches[2] == "EUC_2D")   { data.edgeWeightType = Type::EdgeWeightType::EUC_2D; data.nodeCoordenatesType = Type::NodeCoordenatesType::TWOD_COORDS; }
+        else if (matches[2] == "EUC_3D")   { data.edgeWeightType = Type::EdgeWeightType::EUC_3D; data.nodeCoordenatesType = Type::NodeCoordenatesType::THREED_COORDS; }
+        else if (matches[2] == "MAX_2D")   { data.edgeWeightType = Type::EdgeWeightType::MAX_2D; }
+        else if (matches[2] == "MAX_3D")   { data.edgeWeightType = Type::EdgeWeightType::MAX_3D; }
+        else if (matches[2] == "MAN_2D")   { data.edgeWeightType = Type::EdgeWeightType::MAN_2D; }
+        else if (matches[2] == "MAN_3D")   { data.edgeWeightType = Type::EdgeWeightType::MAN_3D; }
+        else if (matches[2] == "CEIL_2D")  { data.edgeWeightType = Type::EdgeWeightType::CEIL_2D; }
+        else if (matches[2] == "GEO")      { data.edgeWeightType = Type::EdgeWeightType::GEO; }
+        else if (matches[2] == "ATT")      { data.edgeWeightType = Type::EdgeWeightType::ATT; data.nodeCoordenatesType = Type::NodeCoordenatesType::TWOD_COORDS; }
+        else if (matches[2] == "XRAY1")    { data.edgeWeightType = Type::EdgeWeightType::XRAY1; }
+        else if (matches[2] == "XRAY2")    { data.edgeWeightType = Type::EdgeWeightType::XRAY2; }
+        else if (matches[2] == "SPECIAL")  { data.edgeWeightType = Type::EdgeWeightType::SPECIAL; }
     }
     else if (matches[1] == "EDGE_WEIGHT_FORMAT")
     {
@@ -96,7 +96,7 @@ void fillSpecs(tsp::TSPLibData& data, std::smatch& matches)
     return;
 }
 
-bool parseSpec(tsp::TSPLibData& data, std::string fileLine)
+bool parseSpec(tsp::TSPLibData& data, const std::string& fileLine)
 {
     /* Matches all the specification tags*/
     std::regex specsRegex("^(.+) ?: ?(\\b.+)$");
@@ -110,12 +110,61 @@ bool parseSpec(tsp::TSPLibData& data, std::string fileLine)
         return true;
     }
 
-    for (std::size_t i = 1; i < specsMatches.size(); ++i)
+    fillSpecs(data, specsMatches);
+
+    return false;
+}
+
+bool parseData(tsp::TSPLibData& data, const std::string& fileLine, std::istream& file)
+{
+    /* Matches all the specification tags*/
+    std::regex specsRegex("^\\s*(.*_SECTION):?\\s*$");
+    std::smatch specsMatches;
+
+    /* Regex search */
+    std::regex_search(fileLine, specsMatches, specsRegex);
+
+    if (specsMatches.ready() && specsMatches.empty() && specsMatches.size() == 0)
     {
-        std::cout << specsMatches[i] << std::endl;
+        return true;
     }
 
-    fillSpecs(data, specsMatches);
+    if (specsMatches[1] == "NODE_COORD_SECTION")
+    {
+        int index = 0;
+        std::string dataLine;
+        using d = tsp::TSPLibData;
+
+        if (data.nodeCoordenatesType == d::NodeCoordenatesType::TWOD_COORDS)
+        {
+            std::getline(file, dataLine);
+
+            while (file.good() && dataLine != "EOF")
+            {
+                std::istringstream sstream(dataLine);
+                sstream >> index;
+                --index;
+                sstream >> data.coordinates.at(index).coordinate.at(0);
+                sstream >> data.coordinates.at(index).coordinate.at(1);
+                std::getline(file, dataLine);
+            }
+        }
+        else if (data.nodeCoordenatesType == d::NodeCoordenatesType::THREED_COORDS)
+        {
+            std::getline(file, dataLine);
+
+            while (file.good() && dataLine != "EOF")
+            {
+                std::istringstream sstream(dataLine);
+                sstream >> index;
+                --index;
+                sstream >> data.coordinates.at(index).coordinate.at(0);
+                sstream >> data.coordinates.at(index).coordinate.at(1);
+                sstream >> data.coordinates.at(index).coordinate.at(2);
+                std::getline(file, dataLine);
+            }
+        }
+    }
 
     return false;
 }
@@ -133,6 +182,7 @@ void tsp::TSPLibData::load(std::istream &file)
         endOfHeader = parseSpec(*this, fileLine);
     }
 
+    parseData(*this, fileLine, file);
+
     //TODO: parse the data section
 }
-
