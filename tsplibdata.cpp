@@ -4,10 +4,6 @@
 #include <sstream>
 #include "tsplibdata.h"
 
-tsp::TSPLibData::TSPLibData()
-{
-
-}
 
 void fillSpecs(tsp::TSPLibData& data, std::smatch& matches)
 {

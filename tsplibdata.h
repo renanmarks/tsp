@@ -101,9 +101,6 @@ public:
     std::vector<NodeCoordinates> coordinates;
 
     /* Methods */
-
-    TSPLibData();
-
     void load(std::istream& file);
 
 };
