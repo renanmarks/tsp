@@ -50,5 +50,7 @@ int main(int argc, char *argv[])
 
     tsp::TSPGreedyConstruct greedy(data);
 
+    greedy.run().print(std::cout);
+
     return 0;
 }
