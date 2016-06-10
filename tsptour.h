@@ -10,7 +10,9 @@ namespace tsp
     struct TSPTour
     {
         uint32_t distance;
-        std::vector<uint32_t> tour;
+
+        using Edge = std::pair<uint32_t, uint32_t>;
+        std::vector<Edge> tour;
 
         TSPTour();
 
