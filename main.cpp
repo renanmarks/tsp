@@ -2,6 +2,7 @@
 #include <fstream>
 #include "tsplibdata.h"
 #include "tspcanonicaltest.h"
+#include "tspgreedyconstruct.h"
 
 void test(std::string filename)
 {
@@ -15,21 +16,8 @@ void test(std::string filename)
     tour.print(std::cout);
 }
 
-int main(int argc, char *argv[])
+void testRun()
 {
-//    if (argc <= 1)
-//    {
-//        std::cout << "Inform filename." << std::endl;
-
-//        return 1;
-//    }
-
-//    std::string filename = argv[1];
-
-//    tsp::TSPLibData data;
-//    std::ifstream file(filename);
-//    data.load(file);
-
     std::cout << "pcb442.tsp" << std::endl;
     test("pcb442.tsp");
 
@@ -38,6 +26,29 @@ int main(int argc, char *argv[])
 
     std::cout << "att532.tsp" << std::endl;
     test("att532.tsp");
+}
+
+int main(int argc, char *argv[])
+{
+    if (argc <= 1)
+    {
+        std::cout << "Inform filename." << std::endl;
+        return 1;
+    }
+
+    std::string option = argv[1];
+
+    if (option == "--test")
+    {
+        testRun();
+        return 0;
+    }
+
+    tsp::TSPLibData data;
+    std::ifstream file(option);
+    data.load(file);
+
+    tsp::TSPGreedyConstruct greedy(data);
 
     return 0;
 }
