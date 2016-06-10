@@ -150,7 +150,7 @@ bool parseData(tsp::TSPLibData& data, const std::string& fileLine, std::istream&
                 sstream >> z;
             }
 
-            data.coordinates.at(index) = d::NodeCoordinates(x, y, z, data);
+            data.coordinates.at(index) = d::NodeCoordinates(index, x, y, z, data);
             std::getline(file, dataLine);
         }
     }
@@ -178,13 +178,13 @@ void tsp::TSPLibData::load(std::istream &file)
     //TODO: parse the data section
 }
 
-tsp::TSPLibData::NodeCoordinates::NodeCoordinates(double x, double y, double z, const TSPLibData &p)
-    : coordinate({x, y, z}), dataset(&p)
+tsp::TSPLibData::NodeCoordinates::NodeCoordinates(std::uint32_t i, double x, double y, double z, const TSPLibData &p)
+    : index(i), coordinate({x, y, z}), dataset(&p)
 {
 
 }
 
-double tsp::TSPLibData::NodeCoordinates::operator[](size_t i) const
+tsp::TSPLibData::NodeCoordinates::value_type tsp::TSPLibData::NodeCoordinates::operator[](size_t i) const
 {
     return this->coordinate.at(i);
 }

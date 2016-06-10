@@ -100,11 +100,13 @@ public:
         const TSPLibData* dataset;
 
     public:
+        std::uint32_t index;
         std::array<double, 3> coordinate;
+        using value_type = double;
 
         NodeCoordinates() = default;
-        NodeCoordinates(double x, double y, double z, const TSPLibData& p);
-        double operator[](size_t i) const;
+        NodeCoordinates(uint32_t i, double x, double y, double z, const TSPLibData& p);
+        value_type operator[](size_t i) const;
         double distance(const NodeCoordinates&); // used by libkdtree++
     };
 
