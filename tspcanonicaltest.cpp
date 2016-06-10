@@ -21,14 +21,14 @@ tsp::TSPTour tsp::TSPCanonicalTest::run()
         auto& c0 = this->data.coordinates.at(i);
         auto& c1 = this->data.coordinates.at(j);
 
-        tour.distance += tsp::distanceFunctions[this->data.edgeWeightType](c0, c1);
+        tour.distance += c0.distance(c1) ;
         tour.tour.push_back(std::make_pair(i,j));
     }
 
     /* Close the tour */
     auto& last = this->data.coordinates.at(i);
     auto& first = this->data.coordinates.at(0);
-    tour.distance += tsp::distanceFunctions[this->data.edgeWeightType](last, first);
+    tour.distance += last.distance(first);
     tour.tour.push_back(std::make_pair(i,0));
 
     return tour;
