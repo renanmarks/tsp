@@ -7,6 +7,7 @@
 #include <map>
 #include <string>
 #include <vector>
+#include <functional>
 
 namespace tsp
 {
@@ -93,9 +94,18 @@ public:
 
     DisplayDataType displayDataType;
 
-    struct NodeCoordinates
+    class NodeCoordinates
     {
+    private:
+        const TSPLibData* dataset;
+
+    public:
         std::array<double, 3> coordinate;
+
+        NodeCoordinates() = default;
+        NodeCoordinates(double x, double y, double z, const TSPLibData& p);
+        double operator[](size_t i) const;
+        double distance(const NodeCoordinates&); // used by libkdtree++
     };
 
     std::vector<NodeCoordinates> coordinates;

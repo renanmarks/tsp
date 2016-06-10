@@ -3,7 +3,10 @@
 #include <iostream>
 #include <sstream>
 #include "tsplibdata.h"
+#include "tsplibdistance.h"
 
+/* Only local to this translation unit */
+namespace {
 
 void fillSpecs(tsp::TSPLibData& data, std::smatch& matches)
 {
@@ -131,38 +134,30 @@ bool parseData(tsp::TSPLibData& data, const std::string& fileLine, std::istream&
         std::string dataLine;
         using d = tsp::TSPLibData;
 
-        if (data.nodeCoordenatesType == d::NodeCoordenatesType::TWOD_COORDS)
-        {
-            std::getline(file, dataLine);
+        std::getline(file, dataLine);
 
-            while (file.good() && dataLine != "EOF")
-            {
-                std::istringstream sstream(dataLine);
-                sstream >> index;
-                --index;
-                sstream >> data.coordinates.at(index).coordinate.at(0);
-                sstream >> data.coordinates.at(index).coordinate.at(1);
-                std::getline(file, dataLine);
-            }
-        }
-        else if (data.nodeCoordenatesType == d::NodeCoordenatesType::THREED_COORDS)
+        while (file.good() && dataLine != "EOF")
         {
-            std::getline(file, dataLine);
+            std::istringstream sstream(dataLine);
+            double x = 0.0;
+            double y = 0.0;
+            double z = 0.0;
+            sstream >> index;  --index;
+            sstream >> x >> y;
 
-            while (file.good() && dataLine != "EOF")
+            if (data.nodeCoordenatesType == d::NodeCoordenatesType::THREED_COORDS)
             {
-                std::istringstream sstream(dataLine);
-                sstream >> index;
-                --index;
-                sstream >> data.coordinates.at(index).coordinate.at(0);
-                sstream >> data.coordinates.at(index).coordinate.at(1);
-                sstream >> data.coordinates.at(index).coordinate.at(2);
-                std::getline(file, dataLine);
+                sstream >> z;
             }
+
+            data.coordinates.at(index) = d::NodeCoordinates(x, y, z, data);
+            std::getline(file, dataLine);
         }
     }
 
     return false;
+}
+
 }
 
 void tsp::TSPLibData::load(std::istream &file)
@@ -181,4 +176,20 @@ void tsp::TSPLibData::load(std::istream &file)
     parseData(*this, fileLine, file);
 
     //TODO: parse the data section
+}
+
+tsp::TSPLibData::NodeCoordinates::NodeCoordinates(double x, double y, double z, const TSPLibData &p)
+    : coordinate({x, y, z}), dataset(&p)
+{
+
+}
+
+double tsp::TSPLibData::NodeCoordinates::operator[](size_t i) const
+{
+    return this->coordinate.at(i);
+}
+
+double tsp::TSPLibData::NodeCoordinates::distance(const tsp::TSPLibData::NodeCoordinates& node)
+{
+    return tsp::distanceFunctions[this->dataset->edgeWeightType](*this, node);
 }
