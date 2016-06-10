@@ -13,15 +13,8 @@ private:
 
 public:
     TSPCanonicalTest(const TSPLibData& _data);
-    virtual ~TSPCanonicalTest() = default;
 
     virtual TSPTour run() override;
-
-    TSPCanonicalTest() = default;
-    TSPCanonicalTest(const TSPCanonicalTest& copyFrom) = default;
-    TSPCanonicalTest& operator=(const TSPCanonicalTest& copyFrom) = default;
-    TSPCanonicalTest(TSPCanonicalTest &&) = default;
-    TSPCanonicalTest& operator=(TSPCanonicalTest &&) = default;
 };
 }
 

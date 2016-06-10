@@ -11,6 +11,12 @@ public:
     virtual ~ITSPAlgorithm() { }
 
     virtual TSPTour run() = 0;
+
+    ITSPAlgorithm() = default;
+    ITSPAlgorithm(const ITSPAlgorithm& copyFrom) = default;
+    ITSPAlgorithm& operator=(const ITSPAlgorithm& copyFrom) = default;
+    ITSPAlgorithm(ITSPAlgorithm &&) = default;
+    ITSPAlgorithm& operator=(ITSPAlgorithm &&) = default;
 };
 }
 
