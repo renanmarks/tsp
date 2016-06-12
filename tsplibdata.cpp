@@ -178,6 +178,12 @@ void tsp::TSPLibData::load(std::istream &file)
     //TODO: parse the data section
 }
 
+tsp::TSPLibData::NodeCoordinates::NodeCoordinates(double x, double y, double z)
+    : index(0), coordinate({x, y, z})
+{
+
+}
+
 tsp::TSPLibData::NodeCoordinates::NodeCoordinates(int64_t i, double x, double y, double z)
     : index(i), coordinate({x, y, z})
 {

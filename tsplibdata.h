@@ -102,6 +102,7 @@ public:
         using value_type = double;
 
         NodeCoordinates() = default;
+        NodeCoordinates(double x, double y, double z);
         NodeCoordinates(int64_t i, double x, double y, double z);
         value_type operator[](size_t i) const;
         bool operator==(const NodeCoordinates& other) const;
