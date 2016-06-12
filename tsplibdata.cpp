@@ -150,7 +150,7 @@ bool parseData(tsp::TSPLibData& data, const std::string& fileLine, std::istream&
                 sstream >> z;
             }
 
-            data.coordinates.at(index) = d::NodeCoordinates(index, x, y, z, data);
+            data.coordinates.at(index) = d::NodeCoordinates(index, x, y, z);
             std::getline(file, dataLine);
         }
     }
@@ -178,8 +178,8 @@ void tsp::TSPLibData::load(std::istream &file)
     //TODO: parse the data section
 }
 
-tsp::TSPLibData::NodeCoordinates::NodeCoordinates(std::uint32_t i, double x, double y, double z, const TSPLibData &p)
-    : index(i), coordinate({x, y, z}), dataset(&p)
+tsp::TSPLibData::NodeCoordinates::NodeCoordinates(int64_t i, double x, double y, double z)
+    : index(i), coordinate({x, y, z})
 {
 
 }
@@ -189,7 +189,12 @@ tsp::TSPLibData::NodeCoordinates::value_type tsp::TSPLibData::NodeCoordinates::o
     return this->coordinate.at(i);
 }
 
-double tsp::TSPLibData::NodeCoordinates::distance(const tsp::TSPLibData::NodeCoordinates& node)
+bool tsp::TSPLibData::NodeCoordinates::operator==(const NodeCoordinates& other) const
 {
-    return tsp::distanceFunctions[this->dataset->edgeWeightType](*this, node);
+    return (this->coordinate[0] == other[0]) && (this->coordinate[1] == other[1]) && (this->coordinate[2] == other[2]) && (this->index == other.index);
+}
+
+bool tsp::TSPLibData::NodeCoordinates::operator!=(const NodeCoordinates& other) const
+{
+    return !(*this == other);
 }

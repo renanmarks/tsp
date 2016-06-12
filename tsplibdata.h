@@ -96,18 +96,16 @@ public:
 
     class NodeCoordinates
     {
-    private:
-        const TSPLibData* dataset;
-
     public:
-        std::uint32_t index;
+        std::int64_t index;
         std::array<double, 3> coordinate;
         using value_type = double;
 
         NodeCoordinates() = default;
-        NodeCoordinates(uint32_t i, double x, double y, double z, const TSPLibData& p);
+        NodeCoordinates(int64_t i, double x, double y, double z);
         value_type operator[](size_t i) const;
-        double distance(const NodeCoordinates&); // used by libkdtree++
+        bool operator==(const NodeCoordinates& other) const;
+        bool operator!=(const NodeCoordinates& other) const;
     };
 
     std::vector<NodeCoordinates> coordinates;
