@@ -179,7 +179,7 @@ void tsp::TSPLibData::load(std::istream &file)
 }
 
 tsp::TSPLibData::NodeCoordinates::NodeCoordinates(double x, double y, double z)
-    : index(0), coordinate({x, y, z})
+    : index(-1), coordinate({x, y, z})
 {
 
 }
@@ -197,7 +197,7 @@ tsp::TSPLibData::NodeCoordinates::value_type tsp::TSPLibData::NodeCoordinates::o
 
 bool tsp::TSPLibData::NodeCoordinates::operator==(const NodeCoordinates& other) const
 {
-    return (this->coordinate[0] == other[0]) && (this->coordinate[1] == other[1]) && (this->coordinate[2] == other[2]) && (this->index == other.index);
+    return (this->coordinate[0] == other[0]) && (this->coordinate[1] == other[1]) && (this->coordinate[2] == other[2]);
 }
 
 bool tsp::TSPLibData::NodeCoordinates::operator!=(const NodeCoordinates& other) const
