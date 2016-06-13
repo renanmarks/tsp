@@ -3,6 +3,7 @@
 #include "tsplibdata.h"
 #include "tspcanonicaltest.h"
 #include "tspgreedyconstruct.h"
+#include "tsp2opt.h"
 
 void test(std::string filename)
 {
@@ -49,8 +50,12 @@ int main(int argc, char *argv[])
     data.load(file);
 
     tsp::TSPGreedyConstruct greedy(data);
+    tsp::TSPTour greedyTour = greedy.run();
+    greedyTour.print(std::cout);
 
-    greedy.run().print(std::cout);
+    tsp::TSP2opt tsp2opt(data, greedyTour);
+    tsp::TSPTour optimizedTour = tsp2opt.run();
+    optimizedTour.print(std::cout);
 
     return 0;
 }
