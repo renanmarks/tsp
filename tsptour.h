@@ -11,7 +11,25 @@ namespace tsp
     {
         uint32_t distance;
 
-        using Edge = std::pair<uint32_t, uint32_t>;
+        struct Edge
+        {
+            uint32_t first;
+            uint32_t second;
+
+            Edge() = default;
+            Edge(uint32_t f, uint32_t s);
+            bool isValid() const;
+            Edge reverse() const;
+            bool isReverseOf(const tsp::TSPTour::Edge& rhs) const;
+            bool operator()(const tsp::TSPTour::Edge& rhs) const;
+            bool operator< (const tsp::TSPTour::Edge& rhs) const;
+            bool operator<=(const tsp::TSPTour::Edge& rhs) const;
+            bool operator> (const tsp::TSPTour::Edge& rhs) const;
+            bool operator>=(const tsp::TSPTour::Edge& rhs) const;
+            bool operator==(const tsp::TSPTour::Edge& rhs) const;
+            bool operator!=(const tsp::TSPTour::Edge& rhs) const;
+        };
+
         std::vector<Edge> tour;
 
         TSPTour();
@@ -19,5 +37,6 @@ namespace tsp
         void print(std::ostream& out) const;
     };
 }
+
 
 #endif // TSPTOUR_H

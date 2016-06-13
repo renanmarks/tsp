@@ -2,9 +2,7 @@
 #include "tsptour.h"
 #include "tsplibdistance.h"
 #include <kdtree++/kdtree.hpp>
-#include <functional>
 #include <random>
-#include <iostream>
 
 tsp::TSPGreedyConstruct::TSPGreedyConstruct(const TSPLibData& _data)
     :data(_data)
@@ -88,7 +86,7 @@ buildGreedyTour(tsp::TSPLibData& data)
         if ((resultTuple.first != tree.end()) && (*resultTuple.first != node))
         {
             resultTour.distance += tsp::distanceFunctions[data.edgeWeightType](node, *resultTuple.first);
-            resultTour.tour.push_back(std::make_pair(node.index, resultTuple.first->index));
+            resultTour.tour.push_back(tsp::TSPTour::Edge(node.index, resultTuple.first->index));
 
             node = *resultTuple.first;
         }
@@ -97,7 +95,7 @@ buildGreedyTour(tsp::TSPLibData& data)
 
     // Last to first link
     resultTour.distance += tsp::distanceFunctions[data.edgeWeightType](node, first);
-    resultTour.tour.push_back(std::make_pair(node.index, first.index));
+    resultTour.tour.push_back(tsp::TSPTour::Edge(node.index, first.index));
 
     return resultTour;
 }
