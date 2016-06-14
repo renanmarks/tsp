@@ -4,38 +4,65 @@
 #include <cstdint>
 #include <vector>
 #include <ostream>
+#include "tsplibdistance.h"
 
 namespace tsp
 {
-    struct TSPTour
+    class TSPTour
     {
-        uint32_t distance;
+    private:
+        std::uint32_t distance;
+        std::size_t numberOfEdges;
+        const tsp::TSPLibData& data;
+        using AdjacencyList = std::vector<std::vector<std::uint32_t>>;
+        AdjacencyList adjacencyList;
+
+    public:
 
         struct Edge
         {
-            uint32_t first;
-            uint32_t second;
+            std::uint32_t first;
+            std::uint32_t second;
 
             Edge() = default;
-            Edge(uint32_t f, uint32_t s);
+            Edge(std::uint32_t f, std::uint32_t s);
             bool isValid() const;
             Edge reverse() const;
             bool isReverseOf(const tsp::TSPTour::Edge& rhs) const;
-            bool operator()(const tsp::TSPTour::Edge& rhs) const;
-            bool operator< (const tsp::TSPTour::Edge& rhs) const;
-            bool operator<=(const tsp::TSPTour::Edge& rhs) const;
-            bool operator> (const tsp::TSPTour::Edge& rhs) const;
-            bool operator>=(const tsp::TSPTour::Edge& rhs) const;
-            bool operator==(const tsp::TSPTour::Edge& rhs) const;
-            bool operator!=(const tsp::TSPTour::Edge& rhs) const;
+            bool hasVertexOf(const tsp::TSPTour::Edge& rhs) const;
+            bool operator() (const tsp::TSPTour::Edge& rhs) const;
+            bool operator<  (const tsp::TSPTour::Edge& rhs) const;
+            bool operator<= (const tsp::TSPTour::Edge& rhs) const;
+            bool operator>  (const tsp::TSPTour::Edge& rhs) const;
+            bool operator>= (const tsp::TSPTour::Edge& rhs) const;
+            bool operator== (const tsp::TSPTour::Edge& rhs) const;
+            bool operator!= (const tsp::TSPTour::Edge& rhs) const;
+
         };
 
-        std::vector<Edge> tour;
+        TSPTour(const tsp::TSPLibData& _data);
+        TSPTour(std::uint32_t _vertexNumber, const tsp::TSPLibData& _data);
 
-        TSPTour();
+        void insertEdge(const tsp::TSPLibData::NodeCoordinates& first, const tsp::TSPLibData::NodeCoordinates& second);
+        void insertEdge(const Edge& edge);
+
+        void eraseEdge(const tsp::TSPLibData::NodeCoordinates& first, const tsp::TSPLibData::NodeCoordinates& second);
+        void eraseEdge(const Edge& edge);
+
+        bool haveEdge(const tsp::TSPLibData::NodeCoordinates& first, const tsp::TSPLibData::NodeCoordinates& second) const;
+        bool haveEdge(const Edge& edge) const;
+
+        std::size_t getNumberOfEdges() const;
+        Edge getEdge(const std::size_t i) const;
+        std::vector<Edge> getEdges() const;
 
         void print(std::ostream& out) const;
+
+        std::uint32_t getDistance() const;
+        void setDistance(const std::uint32_t &value);
     };
+
+    std::ostream& operator<<(std::ostream& os, const tsp::TSPTour::Edge& e);
 }
 
 
