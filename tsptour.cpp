@@ -1,6 +1,7 @@
 #include "tsptour.h"
 #include "tsplibdistance.h"
 #include <algorithm>
+#include <iostream>
 
 tsp::TSPTour::TSPTour(const TSPLibData &_data)
     : distance(0), numberOfEdges(0), data(_data)
@@ -19,10 +20,10 @@ void tsp::TSPTour::insertEdge(const tsp::TSPLibData::NodeCoordinates &first, con
     auto listBegin = this->adjacencyList.cbegin();
     auto listEnd = this->adjacencyList.cend();
 
-//    if ((listBegin + first.index >= listEnd) || (listBegin + second.index >= listEnd))
-//    {
-//        return;
-//    }
+    if ((listBegin + first.index >= listEnd) || (listBegin + second.index >= listEnd))
+    {
+        return;
+    }
 
     auto& list1 = this->adjacencyList.at(first.index);
     auto& list2 = this->adjacencyList.at(second.index);
@@ -117,37 +118,39 @@ tsp::TSPTour::Edge tsp::TSPTour::getEdge(const std::size_t index) const
 
 std::vector<tsp::TSPTour::Edge> tsp::TSPTour::getEdges() const
 {
-    std::size_t i = 0;
-    std::size_t j = 0;
-    std::vector<Edge> tourEdges;
+    std::vector<std::vector<bool>> adjacencyMatrix;
+    std::vector<Edge> returnEdges;
+    std::size_t numberOfVertices = this->adjacencyList.size();
 
-    while (tourEdges.size() < this->getNumberOfEdges())
+    returnEdges.reserve(this->numberOfEdges);
+    adjacencyMatrix.resize(numberOfVertices);
+
+    for (auto& line : adjacencyMatrix)
     {
-        const auto& list = this->adjacencyList.at(i);
-
-        if (list.size() == 0)
-        {
-            ++i;
-            continue;
-        }
-
-        std::uint32_t first  = i;
-        std::uint32_t second = list.at(j);
-        Edge edge(first, second);
-
-        if (tourEdges.size() > 0 && edge.isReverseOf(tourEdges.back()))
-        {
-            ++j;
-            continue;
-        }
-
-        tourEdges.push_back(edge);
-
-        i = second;
-        j = 0;
+        line.resize(numberOfVertices);
     }
 
-    return tourEdges;
+    for (std::uint32_t first = 0; first < this->adjacencyList.size(); first++)
+    {
+        const auto& list = this->adjacencyList.at(first);
+
+        for (std::uint32_t second : list)
+        {
+            Edge edge(first, second);
+
+            if (edge.isValid() &&
+                    adjacencyMatrix[first][second] == false &&
+                    adjacencyMatrix[second][first] == false)
+            {
+                adjacencyMatrix[first][second] = true;
+                adjacencyMatrix[second][first] = true;
+
+                returnEdges.push_back(edge);
+            }
+        }
+    }
+
+    return returnEdges;
 }
 
 std::uint32_t tsp::TSPTour::getDistance() const
@@ -176,31 +179,6 @@ tsp::TSPTour::Edge::Edge(std::uint32_t f, std::uint32_t s)
     :first(f), second(s)
 {
 
-}
-
-bool tsp::TSPTour::Edge::operator()(const tsp::TSPTour::Edge &rhs) const
-{
-    return (*this < rhs);
-}
-
-bool tsp::TSPTour::Edge::operator<(const tsp::TSPTour::Edge &rhs) const
-{
-    return (this->first < rhs.first) && (this->second < rhs.second);
-}
-
-bool tsp::TSPTour::Edge::operator<=(const tsp::TSPTour::Edge &rhs) const
-{
-    return (*this < rhs) || (*this == rhs);
-}
-
-bool tsp::TSPTour::Edge::operator>(const tsp::TSPTour::Edge &rhs) const
-{
-    return (this->first > rhs.first) && (this->second > rhs.second);
-}
-
-bool tsp::TSPTour::Edge::operator>=(const tsp::TSPTour::Edge &rhs) const
-{
-    return (*this > rhs) || (*this == rhs);
 }
 
 bool tsp::TSPTour::Edge::operator==(const tsp::TSPTour::Edge &rhs) const

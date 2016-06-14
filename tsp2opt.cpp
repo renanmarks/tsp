@@ -20,6 +20,7 @@ tsp::TSPTour tsp::TSP2opt::run()
     do
     {
         changedEdges = false;
+        std::vector<tsp::TSPTour::Edge> edgesOfNewTour = newTour.getEdges();
 
         for (std::uint32_t i = 0; (i < numberOfEdges) && (changedEdges == false); ++i)
         {
@@ -31,7 +32,7 @@ tsp::TSPTour tsp::TSP2opt::run()
                 }
 
                 // Try swap edges
-                TSPTour::Edge edge[2] = { newTour.getEdge(i), newTour.getEdge(j) };
+                TSPTour::Edge edge[2] = { edgesOfNewTour.at(i), edgesOfNewTour.at(j) };
 
                 if (edge[0].hasVertexOf(edge[1]))
                 {
@@ -66,14 +67,10 @@ tsp::TSPTour tsp::TSP2opt::run()
                 // Great! We have improvement!
                 if (newDistance < oldDistance)
                 {
-                    std::cout << "Erasing: " << edge[0] << " " << edge[1] << std::endl;
-                    std::cout << "Inserting: " << newEdge[0] << " " << newEdge[1] << std::endl;
-
                     newTour.eraseEdge(edge[0]);
                     newTour.eraseEdge(edge[1]);
                     newTour.insertEdge(newEdge[0]);
                     newTour.insertEdge(newEdge[1]);
-//                    newTour.setDistance(newTour.getDistance() - oldDistance + newDistance);
                     changedEdges = true;
                 }
             }

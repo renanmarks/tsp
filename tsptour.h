@@ -31,10 +31,6 @@ namespace tsp
             bool isReverseOf(const tsp::TSPTour::Edge& rhs) const;
             bool hasVertexOf(const tsp::TSPTour::Edge& rhs) const;
             bool operator() (const tsp::TSPTour::Edge& rhs) const;
-            bool operator<  (const tsp::TSPTour::Edge& rhs) const;
-            bool operator<= (const tsp::TSPTour::Edge& rhs) const;
-            bool operator>  (const tsp::TSPTour::Edge& rhs) const;
-            bool operator>= (const tsp::TSPTour::Edge& rhs) const;
             bool operator== (const tsp::TSPTour::Edge& rhs) const;
             bool operator!= (const tsp::TSPTour::Edge& rhs) const;
 
