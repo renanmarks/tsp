@@ -2,13 +2,14 @@
 #include <fstream>
 #include "tsplibdata.h"
 #include "tspcanonicaltest.h"
-#include "tspgreedyconstruct.h"
+#include "tspnearestneighborconstruct.h"
 #include "tsp2opt.h"
 
 void test(std::string filename)
 {
     tsp::TSPLibData data;
     std::ifstream file(filename);
+
     data.load(file);
 
     tsp::TSPCanonicalTest test(data);
@@ -49,11 +50,11 @@ int main(int argc, char *argv[])
     std::ifstream file(option);
     data.load(file);
 
-    tsp::TSPGreedyConstruct greedy(data);
-    tsp::TSPTour greedyTour = greedy.run();
-    greedyTour.print(std::cout);
+    tsp::TSPNearestNeighborConstruct nearestNeighbor(data);
+    tsp::TSPTour nearestNeighborTour = nearestNeighbor.run();
+    nearestNeighborTour.print(std::cout);
 
-    tsp::TSP2opt tsp2opt(data, greedyTour);
+    tsp::TSP2opt tsp2opt(data, nearestNeighborTour);
     tsp::TSPTour optimizedTour = tsp2opt.run();
     optimizedTour.print(std::cout);
 

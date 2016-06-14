@@ -1,10 +1,10 @@
-#include "tspgreedyconstruct.h"
+#include "tspnearestneighborconstruct.h"
 #include "tsptour.h"
 #include "tsplibdistance.h"
 #include <kdtree++/kdtree.hpp>
 #include <random>
 
-tsp::TSPGreedyConstruct::TSPGreedyConstruct(const TSPLibData& _data)
+tsp::TSPNearestNeighborConstruct::TSPNearestNeighborConstruct(const TSPLibData& _data)
     :data(_data)
 {
 
@@ -98,7 +98,7 @@ buildGreedyTour(tsp::TSPLibData& data)
     return resultTour;
 }
 
-tsp::TSPTour tsp::TSPGreedyConstruct::run()
+tsp::TSPTour tsp::TSPNearestNeighborConstruct::run()
 {
     if (this->data.edgeWeightType == tsp::TSPLibData::EdgeWeightType::ATT )
     {
