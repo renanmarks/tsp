@@ -114,7 +114,7 @@ std::vector<tsp::TSPTour::Edge> tsp::TSPTour::getEdges() const
 {
     std::vector<std::vector<bool>> adjacencyMatrix;
     std::vector<Edge> returnEdges;
-    std::size_t numberOfVertices = this->adjacencyList.size();
+    const std::size_t numberOfVertices = this->adjacencyList.size();
 
     returnEdges.reserve(this->numberOfEdges);
     adjacencyMatrix.resize(numberOfVertices);
@@ -124,7 +124,7 @@ std::vector<tsp::TSPTour::Edge> tsp::TSPTour::getEdges() const
         line.resize(numberOfVertices);
     }
 
-    for (std::uint32_t first = 0; first < this->adjacencyList.size(); first++)
+    for (std::uint32_t first = 0; first < numberOfVertices; first++)
     {
         const auto& list = this->adjacencyList.at(first);
 
