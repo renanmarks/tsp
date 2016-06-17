@@ -59,19 +59,25 @@ tsp::TSPTour tsp::TSP2opt::run()
                 uint32_t distanceNode21 = tsp::distanceFunctions[this->data.edgeWeightType](node[2], node[1]);
                 uint32_t newDistance    = distanceNode03 + distanceNode21;
 
-                if (oldDistance == 0 || newDistance == 0)
+                if (oldDistance == 0 || newDistance == 0 || newDistance >= oldDistance)
                 {
                     continue;
                 }
 
-                // Great! We have improvement!
-                if (newDistance < oldDistance)
+                newTour.eraseEdge(edge[0]);
+                newTour.eraseEdge(edge[1]);
+                newTour.insertEdge(newEdge[0]);
+                newTour.insertEdge(newEdge[1]);
+                changedEdges = true;
+
+                // Error! We now have two disconnected components (cicles)!
+                if (newTour.isValid() == false)
                 {
-                    newTour.eraseEdge(edge[0]);
-                    newTour.eraseEdge(edge[1]);
-                    newTour.insertEdge(newEdge[0]);
-                    newTour.insertEdge(newEdge[1]);
-                    changedEdges = true;
+                    newTour.eraseEdge(newEdge[0]);
+                    newTour.eraseEdge(newEdge[1]);
+                    newTour.insertEdge(edge[0]);
+                    newTour.insertEdge(edge[1]);
+                    changedEdges = false;
                 }
             }
         }
