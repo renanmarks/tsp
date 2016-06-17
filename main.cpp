@@ -2,8 +2,10 @@
 #include <fstream>
 #include "tsplibdata.h"
 #include "tspcanonicaltest.h"
+#include "tspgrasp.h"
 #include "tspnearestneighborconstruct.h"
 #include "tsp2opt.h"
+
 
 void test(std::string filename)
 {
@@ -50,13 +52,13 @@ int main(int argc, char *argv[])
     std::ifstream file(option);
     data.load(file);
 
-    tsp::TSPNearestNeighborConstruct nearestNeighbor(data);
-    tsp::TSPTour nearestNeighborTour = nearestNeighbor.run();
-    nearestNeighborTour.print(std::cout);
+    tsp::TSPGrasp grasp(data, 50);
+    tsp::TSPTour tour = grasp.run();
 
-    tsp::TSP2opt tsp2opt(data, nearestNeighborTour);
-    tsp::TSPTour optimizedTour = tsp2opt.run();
-    optimizedTour.print(std::cout);
+    if ( tour.isValid() )
+    {
+        tour.print(std::cout);
+    }
 
     return 0;
 }
