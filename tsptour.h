@@ -37,7 +37,6 @@ namespace tsp
         };
 
         TSPTour(const tsp::TSPLibData& _data);
-        TSPTour(std::uint32_t _vertexNumber, const tsp::TSPLibData& _data);
 
         void insertEdge(const tsp::TSPLibData::NodeCoordinates& first, const tsp::TSPLibData::NodeCoordinates& second);
         void insertEdge(const Edge& edge);

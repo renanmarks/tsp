@@ -9,12 +9,6 @@ tsp::TSPTour::TSPTour(const TSPLibData &_data)
     this->adjacencyList.resize(_data.coordinates.size());
 }
 
-tsp::TSPTour::TSPTour(uint32_t _vertexNumber, const TSPLibData &_data)
-    : TSPTour(_data)
-{
-
-}
-
 void tsp::TSPTour::insertEdge(const tsp::TSPLibData::NodeCoordinates &first, const tsp::TSPLibData::NodeCoordinates &second)
 {
     auto listBegin = this->adjacencyList.cbegin();
