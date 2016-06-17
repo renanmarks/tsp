@@ -13,7 +13,7 @@ namespace tsp
     private:
         std::uint32_t distance;
         std::size_t numberOfEdges;
-        const tsp::TSPLibData& data;
+        tsp::TSPLibData data;
         using AdjacencyList = std::vector<std::vector<std::uint32_t>>;
         AdjacencyList adjacencyList;
 
@@ -46,6 +46,8 @@ namespace tsp
 
         bool haveEdge(const tsp::TSPLibData::NodeCoordinates& first, const tsp::TSPLibData::NodeCoordinates& second) const;
         bool haveEdge(const Edge& edge) const;
+
+        bool isValid() const;
 
         std::size_t getNumberOfEdges() const;
         Edge getEdge(const std::size_t i) const;

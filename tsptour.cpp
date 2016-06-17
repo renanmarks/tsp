@@ -2,6 +2,7 @@
 #include "tsplibdistance.h"
 #include <algorithm>
 #include <iostream>
+#include <set>
 
 tsp::TSPTour::TSPTour(const TSPLibData &_data)
     : distance(0), numberOfEdges(0), data(_data)
@@ -98,6 +99,42 @@ bool tsp::TSPTour::haveEdge(const tsp::TSPTour::Edge &edge) const
     bool otherway = (it2 != list2.end());
 
     return oneway && otherway;
+}
+
+bool tsp::TSPTour::isValid() const
+{
+    tsp::TSPTour adjList = *this;
+    std::set<std::uint32_t> vertices;
+    std::uint32_t first = 0;
+    std::uint32_t second = 0;
+    std::uint32_t zeroInsertions = 0;
+
+    while (adjList.getNumberOfEdges() > 0)
+    {
+        second = adjList.adjacencyList.at(first).back();
+        Edge edge(first,second);
+
+        if (
+             ( (second == 0) && (zeroInsertions > 1) && (vertices.find(second) != vertices.end()) ) ||
+             ( (second != 0) && (vertices.find(second) != vertices.end()) )
+           )
+        {
+            return false;
+        }
+
+        vertices.insert(second);
+
+        if (second == 0)
+        {
+            ++zeroInsertions;
+        }
+
+        first = second;
+        second = 0;
+        adjList.eraseEdge(edge);
+    }
+
+    return true;
 }
 
 std::size_t tsp::TSPTour::getNumberOfEdges() const
