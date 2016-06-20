@@ -5,6 +5,7 @@
 #include "tspgrasp.h"
 #include "tspnearestneighborconstruct.h"
 #include "tsp2opt.h"
+#include "tsptabu.h"
 
 
 void test(std::string filename)
@@ -53,11 +54,19 @@ int main(int argc, char *argv[])
     data.load(file);
 
     tsp::TSPGrasp grasp(data, 50);
-    tsp::TSPTour tour = grasp.run();
+    tsp::TSPTour tourGrasp = grasp.run();
 
-    if ( tour.isValid() )
+    if ( tourGrasp.isValid() )
     {
-        tour.print(std::cout);
+        tourGrasp.print(std::cout);
+    }
+
+    tsp::TSPTabu tabu(data, 50, 5, 10);
+    tsp::TSPTour tourTabu = tabu.run();
+
+    if ( tourTabu.isValid() )
+    {
+        tourTabu.print(std::cout);
     }
 
     return 0;
