@@ -194,6 +194,16 @@ void tsp::TSPTour::setDistance(const std::uint32_t &value)
     distance = value;
 }
 
+bool tsp::TSPTour::operator==(const tsp::TSPTour &rhs) const
+{
+    return this->adjacencyList == rhs.adjacencyList && this->distance == rhs.distance && this->data == rhs.data;
+}
+
+bool tsp::TSPTour::operator!=(const tsp::TSPTour &rhs) const
+{
+    return !(*this == rhs);
+}
+
 void tsp::TSPTour::print(std::ostream &out) const
 {
     out << "Distance : " << this->distance << std::endl;

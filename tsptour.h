@@ -57,6 +57,9 @@ namespace tsp
 
         std::uint32_t getDistance() const;
         void setDistance(const std::uint32_t &value);
+
+        bool operator== (const tsp::TSPTour& rhs) const;
+        bool operator!= (const tsp::TSPTour& rhs) const;
     };
 
     std::ostream& operator<<(std::ostream& os, const tsp::TSPTour::Edge& e);
