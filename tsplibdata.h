@@ -111,9 +111,10 @@ public:
 
     std::vector<NodeCoordinates> coordinates;
 
-    /* Methods */
     void load(std::istream& file);
 
+    bool operator==(const TSPLibData& other) const;
+    bool operator!=(const TSPLibData& other) const;
 };
 
 }

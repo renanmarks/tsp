@@ -176,6 +176,24 @@ void tsp::TSPLibData::load(std::istream &file)
     parseData(*this, fileLine, file);
 }
 
+bool tsp::TSPLibData::operator==(const tsp::TSPLibData &other) const
+{
+    bool sameCapacity = this->capacity == other.capacity;
+    bool sameDimension = this->dimension == other.dimension;
+    bool sameType = this->type == other.type;
+    bool sameEdgeWeightFormat = this->edgeWeightFormat == other.edgeWeightFormat;
+    bool sameEdgeDataFormat = this->edgeDataFormat == other.edgeDataFormat;
+    bool sameName = this->name == other.name;
+    bool sameCoords = this->coordinates == other.coordinates;
+
+    return (sameCapacity && sameDimension && sameType && sameEdgeWeightFormat && sameEdgeDataFormat && sameName && sameCoords);
+}
+
+bool tsp::TSPLibData::operator!=(const tsp::TSPLibData &other) const
+{
+    return !(*this == other);
+}
+
 tsp::TSPLibData::NodeCoordinates::NodeCoordinates(double x, double y, double z)
     : index(-1), coordinate({x, y, z})
 {
