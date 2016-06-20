@@ -16,6 +16,8 @@ private:
 public:
     TSP2opt(const TSPLibData& _data, const TSPTour& _tour);
 
+    std::vector<TSPTour> getValidNeighbourMoves() const;
+
     virtual TSPTour run() override;
 };
 

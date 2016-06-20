@@ -10,6 +10,67 @@ tsp::TSP2opt::TSP2opt(const tsp::TSPLibData &_data, const tsp::TSPTour &_tour)
 
 }
 
+std::vector<tsp::TSPTour> tsp::TSP2opt::getValidNeighbourMoves() const
+{
+    using Coords = tsp::TSPLibData::NodeCoordinates;
+    tsp::TSPTour newTour = this->originalTour;
+    std::uint32_t numberOfEdges = newTour.getNumberOfEdges();
+    std::vector<tsp::TSPTour::Edge> edgesOfNewTour = newTour.getEdges();
+
+    std::vector<tsp::TSPTour> validMoves;
+
+    for (std::uint32_t i = 0; i < numberOfEdges; ++i)
+    {
+        for (std::uint32_t j = 0; j < numberOfEdges; ++j)
+        {
+            if (j == i)
+            {
+                continue;
+            }
+
+            // Try swap edges
+            TSPTour::Edge edge[2] = { edgesOfNewTour.at(i), edgesOfNewTour.at(j) };
+
+            if (edge[0].hasVertexOf(edge[1]))
+            {
+                continue;
+            }
+
+            Coords node[4] = { this->data.coordinates.at(edge[0].first), this->data.coordinates.at(edge[0].second),
+                               this->data.coordinates.at(edge[1].first), this->data.coordinates.at(edge[1].second) };
+
+            tsp::TSPTour::Edge newEdge[2] = { tsp::TSPTour::Edge(node[0].index, node[3].index),
+                                              tsp::TSPTour::Edge(node[2].index, node[1].index) };
+
+            if (newEdge[0].isValid() == false || newEdge[1].isValid() == false ||
+                newTour.haveEdge(newEdge[0]) == true || newTour.haveEdge(newEdge[1]) == true)
+            {
+                continue;
+            }
+
+            newTour.eraseEdge(edge[0]);
+            newTour.eraseEdge(edge[1]);
+            newTour.insertEdge(newEdge[0]);
+            newTour.insertEdge(newEdge[1]);
+
+            // Error! We now have two disconnected components (cicles)!
+            if (newTour.isValid() == false)
+            {
+                newTour.eraseEdge(newEdge[0]);
+                newTour.eraseEdge(newEdge[1]);
+                newTour.insertEdge(edge[0]);
+                newTour.insertEdge(edge[1]);
+                continue;
+            }
+
+            validMoves.push_back(newTour);
+            newTour = this->originalTour;
+        }
+    }
+
+    return validMoves;
+}
+
 tsp::TSPTour tsp::TSP2opt::run()
 {
     using Coords = tsp::TSPLibData::NodeCoordinates;
