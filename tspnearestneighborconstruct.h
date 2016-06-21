@@ -10,7 +10,7 @@ namespace tsp
 class TSPNearestNeighborConstruct : public ITSPAlgorithm
 {
 private:
-    TSPLibData data;
+    const TSPLibData* data;
 
 public:
     TSPNearestNeighborConstruct(const TSPLibData& _data);

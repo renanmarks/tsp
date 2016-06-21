@@ -5,7 +5,7 @@
 #include <algorithm>
 
 tsp::TSPTabu::TSPTabu(const TSPLibData &_data, uint32_t _numberIterations, size_t _tabuListSize, int32_t _incumbentCost)
-    : data(_data), numberIterations(_numberIterations), tabuListSize(_tabuListSize), incumbentCost(_incumbentCost)
+    : data(&_data), numberIterations(_numberIterations), tabuListSize(_tabuListSize), incumbentCost(_incumbentCost)
 {
 
 }
@@ -14,7 +14,7 @@ tsp::TSPTour tsp::TSPTabu::run()
 {
     // TODO: Build better architecture :)
     std::deque<tsp::TSPTour> tabuList;
-    tsp::TSPNearestNeighborConstruct nearestNeighbor(this->data);
+    tsp::TSPNearestNeighborConstruct nearestNeighbor(*(this->data));
     tsp::TSPTour bestTour = nearestNeighbor.run();
 
     std::uint32_t maxNotChangedCount = this->numberIterations;
@@ -25,7 +25,7 @@ tsp::TSPTour tsp::TSPTabu::run()
          (iterations < this->numberIterations) && (notChangedCount < maxNotChangedCount);
          ++iterations, ++notChangedCount)
     {
-        tsp::TSP2opt tsp2opt(this->data, bestTour);
+        tsp::TSP2opt tsp2opt(*(this->data), bestTour);
         auto neighbourMoves = tsp2opt.getValidNeighbourMoves();
         std::uint32_t cost = 0;
 

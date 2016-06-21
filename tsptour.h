@@ -13,7 +13,7 @@ namespace tsp
     private:
         std::uint32_t distance;
         std::size_t numberOfEdges;
-        tsp::TSPLibData data;
+        const tsp::TSPLibData* data;
         using AdjacencyList = std::vector<std::vector<std::uint32_t>>;
         AdjacencyList adjacencyList;
 

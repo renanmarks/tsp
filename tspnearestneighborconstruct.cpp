@@ -1,11 +1,11 @@
 #include "tspnearestneighborconstruct.h"
 #include "tsptour.h"
 #include "tsplibdistance.h"
-#include <kdtree++/kdtree.hpp>
+#include "kdtree++/kdtree.hpp"
 #include <random>
 
 tsp::TSPNearestNeighborConstruct::TSPNearestNeighborConstruct(const TSPLibData& _data)
-    :data(_data)
+    :data(&_data)
 {
 
 }
@@ -48,7 +48,7 @@ using PseudoEuclideanTree = KDTree::KDTree<2, Coords, CoordsAccess, SquaredDiffe
  */
 template <typename treetype>
 tsp::TSPTour
-buildGreedyTour(tsp::TSPLibData& data)
+buildGreedyTour(const tsp::TSPLibData& data)
 {
     treetype tree;
     tsp::TSPTour resultTour(data);
@@ -100,10 +100,10 @@ buildGreedyTour(tsp::TSPLibData& data)
 
 tsp::TSPTour tsp::TSPNearestNeighborConstruct::run()
 {
-    if (this->data.edgeWeightType == tsp::TSPLibData::EdgeWeightType::ATT )
+    if (this->data->edgeWeightType == tsp::TSPLibData::EdgeWeightType::ATT )
     {
-        return buildGreedyTour<PseudoEuclideanTree>(this->data);
+        return buildGreedyTour<PseudoEuclideanTree>(*(this->data));
     }
 
-    return buildGreedyTour<EuclideanTree>(this->data);
+    return buildGreedyTour<EuclideanTree>(*(this->data));
 }

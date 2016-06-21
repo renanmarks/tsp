@@ -10,7 +10,7 @@ namespace tsp
 class TSP2opt : public ITSPAlgorithm
 {
 private:
-    TSPLibData data;
+    const TSPLibData* data;
     TSPTour originalTour;
 
 public:

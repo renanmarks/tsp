@@ -5,7 +5,7 @@
 #include <set>
 
 tsp::TSPTour::TSPTour(const TSPLibData &_data)
-    : distance(0), numberOfEdges(0), data(_data)
+    : distance(0), numberOfEdges(0), data(&_data)
 {
     this->adjacencyList.resize(_data.coordinates.size());
 }
@@ -27,7 +27,7 @@ void tsp::TSPTour::insertEdge(const tsp::TSPLibData::NodeCoordinates &first, con
     std::sort(list1.begin(), list1.end());
     std::sort(list2.begin(), list2.end());
 
-    std::uint32_t distance = tsp::distanceFunctions[this->data.edgeWeightType](first, second);
+    std::uint32_t distance = tsp::distanceFunctions[this->data->edgeWeightType](first, second);
 
     this->setDistance(this->getDistance() + distance);
     ++(this->numberOfEdges);
@@ -35,8 +35,8 @@ void tsp::TSPTour::insertEdge(const tsp::TSPLibData::NodeCoordinates &first, con
 
 void tsp::TSPTour::insertEdge(const tsp::TSPTour::Edge &edge)
 {
-    const auto& first = this->data.coordinates.at(edge.first);
-    const auto& second = this->data.coordinates.at(edge.second);
+    const auto& first = this->data->coordinates.at(edge.first);
+    const auto& second = this->data->coordinates.at(edge.second);
 
     this->insertEdge(first, second);
 }
@@ -68,7 +68,7 @@ void tsp::TSPTour::eraseEdge(const tsp::TSPLibData::NodeCoordinates &first, cons
         std::sort(list2.begin(), list2.end());
     }
 
-    std::uint32_t distance = tsp::distanceFunctions[this->data.edgeWeightType](first, second);
+    std::uint32_t distance = tsp::distanceFunctions[this->data->edgeWeightType](first, second);
 
     this->setDistance(this->getDistance() - distance);
     --(this->numberOfEdges);
@@ -76,8 +76,8 @@ void tsp::TSPTour::eraseEdge(const tsp::TSPLibData::NodeCoordinates &first, cons
 
 void tsp::TSPTour::eraseEdge(const tsp::TSPTour::Edge &edge)
 {
-    const auto& first = this->data.coordinates.at(edge.first);
-    const auto& second = this->data.coordinates.at(edge.second);
+    const auto& first = this->data->coordinates.at(edge.first);
+    const auto& second = this->data->coordinates.at(edge.second);
 
     this->eraseEdge(first, second);
 }
@@ -196,7 +196,7 @@ void tsp::TSPTour::setDistance(const std::uint32_t &value)
 
 bool tsp::TSPTour::operator==(const tsp::TSPTour &rhs) const
 {
-    return this->adjacencyList == rhs.adjacencyList && this->distance == rhs.distance && this->data == rhs.data;
+    return this->adjacencyList == rhs.adjacencyList && this->distance == rhs.distance && *(this->data) == *(rhs.data);
 }
 
 bool tsp::TSPTour::operator!=(const tsp::TSPTour &rhs) const

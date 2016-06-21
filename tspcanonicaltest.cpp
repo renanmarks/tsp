@@ -2,31 +2,26 @@
 #include "tsplibdistance.h"
 
 tsp::TSPCanonicalTest::TSPCanonicalTest(const TSPLibData &_data)
-    : data(_data)
+    : data(&_data)
 {
 
 }
 
 tsp::TSPTour tsp::TSPCanonicalTest::run()
 {
-    TSPTour tour(this->data);
+    TSPTour tour(*(this->data));
 
-    size_t lastItem = this->data.coordinates.size()-1;
+    size_t lastItem = this->data->coordinates.size()-1;
     size_t i = 0;
     size_t j = 1;
 
     /* Build the tour */
     for (i = 0, j = 1; j <= lastItem; ++j, ++i)
     {
-        auto& c0 = this->data.coordinates.at(i);
-        auto& c1 = this->data.coordinates.at(j);
-
         tour.insertEdge(tsp::TSPTour::Edge(i,j));
     }
 
     /* Close the tour */
-    auto& last = this->data.coordinates.at(i);
-    auto& first = this->data.coordinates.at(0);
     tour.insertEdge(tsp::TSPTour::Edge(i,0));
 
     return tour;

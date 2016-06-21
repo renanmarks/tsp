@@ -9,7 +9,7 @@ namespace tsp
 class TSPCanonicalTest : public ITSPAlgorithm
 {
 private:
-    TSPLibData data;
+    const TSPLibData* data;
 
 public:
     TSPCanonicalTest(const TSPLibData& _data);
