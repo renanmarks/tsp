@@ -19,6 +19,8 @@ std::vector<tsp::TSPTour> tsp::TSP2opt::getValidNeighbourMoves() const
 
     std::vector<tsp::TSPTour> validMoves;
 
+    validMoves.reserve(10);
+
     for (std::uint32_t i = 0; i < numberOfEdges; ++i)
     {
         for (std::uint32_t j = 0; j < numberOfEdges; ++j)
@@ -67,6 +69,8 @@ std::vector<tsp::TSPTour> tsp::TSP2opt::getValidNeighbourMoves() const
             newTour = this->originalTour;
         }
     }
+
+    validMoves.shrink_to_fit();
 
     return validMoves;
 }
